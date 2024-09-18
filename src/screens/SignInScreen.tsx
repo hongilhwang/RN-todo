@@ -1,5 +1,7 @@
-import { StyleSheet, View, Image } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Input, { KeyboardTypes, ReturnKeyTypes } from '../components/Input';
+import SafeInputView from '../components/SafeInputView';
+import { useState } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,17 +16,30 @@ const styles = StyleSheet.create({
 });
 
 const SignInScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/main.png')} style={styles.image} />
-      <Input
-        title={'이메일'}
-        placeholder={'your@email.com'}
-        keyboardType={KeyboardTypes.EMAIL}
-        returnKeyType={ReturnKeyTypes.NEXT}
-      />
-      <Input title={'비밀번호'} secureTextEntry />
-    </View>
+    <SafeInputView>
+      <View style={styles.container}>
+        <Image source={require('../assets/main.png')} style={styles.image} />
+        <Input
+          title={'이메일'}
+          placeholder={'your@email.com'}
+          keyboardType={KeyboardTypes.EMAIL}
+          returnKeyType={ReturnKeyTypes.NEXT}
+          onChangeText={(text: string) => setEmail(text.trim())}
+          value={email}
+        />
+        <Input
+          title={'비밀번호'}
+          returnKeyType={ReturnKeyTypes.DONE}
+          onChangeText={(text: string) => setPassword(text.trim())}
+          value={password}
+          secureTextEntry
+        />
+      </View>
+    </SafeInputView>
   );
 };
 

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
+import { BLACK, GRAY, PRIMARY } from '../colors.ts';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,12 +10,30 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 4,
+    color: GRAY.DEFAULT,
+  },
+  hasValueTitle: {
+    color: BLACK,
+  },
+  focusedTitle: {
+    fontWeight: '600',
+    color: PRIMARY.DEFAULT,
   },
   input: {
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
     height: 42,
+    borderColor: GRAY.DEFAULT,
+  },
+  hasValueInput: {
+    borderColor: BLACK,
+    color: BLACK,
+  },
+  focusedInput: {
+    borderWidth: 2,
+    borderColor: PRIMARY.DEFAULT,
+    color: PRIMARY.DEFAULT,
   },
 });
 
@@ -34,6 +53,8 @@ type InputProps = PropsWithChildren<{
   keyboardType?: KeyboardTypes;
   returnKeyType?: ReturnKeyTypes;
   secureTextEntry?: boolean;
+  onChangeText?: (text: string) => void;
+  value: string;
 }>;
 
 const Input = ({
@@ -42,14 +63,29 @@ const Input = ({
   keyboardType = KeyboardTypes.DEFAULT,
   returnKeyType = ReturnKeyTypes.DONE,
   secureTextEntry = false,
+  onChangeText,
+  value,
 }: InputProps) => {
+  const [isFocused, setFocused] = useState(false);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text
+        style={[
+          styles.title,
+          isFocused && styles.focusedTitle,
+          value && styles.hasValueTitle,
+        ]}>
+        {title}
+      </Text>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          isFocused && styles.focusedInput,
+          value && styles.hasValueInput,
+        ]}
         placeholder={placeholder ?? title}
-        placeholderTextColor={'#a3a3a3'}
+        placeholderTextColor={GRAY.DEFAULT}
         autoCapitalize={'none'}
         autoCorrect={false}
         keyboardType={keyboardType}
@@ -57,6 +93,10 @@ const Input = ({
         textContentType={'none'}
         secureTextEntry={secureTextEntry}
         keyboardAppearance={'light'}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        onChangeText={onChangeText}
+        value={value}
       />
     </View>
   );
