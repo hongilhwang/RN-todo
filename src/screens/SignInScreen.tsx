@@ -36,11 +36,14 @@ const SignInScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const handleSubmit = useCallback(() => {
-    Keyboard.dismiss();
-    signIn(email, password)
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+  const handleSubmit = useCallback(async () => {
+    try {
+      Keyboard.dismiss();
+      const data = await signIn(email, password);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   }, [email, password]);
 
   return (
