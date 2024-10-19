@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TextInput, View } from 'react-native';
+import { Image, Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import Input, {
   IconNames,
   KeyboardTypes,
@@ -7,6 +7,7 @@ import Input, {
 import SafeInputView from '../components/SafeInputView';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../components/Button.tsx';
+import { signIn } from '../api/auth.ts';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,7 +36,12 @@ const SignInScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const handleSubmit = useCallback(() => {}, []);
+  const handleSubmit = useCallback(() => {
+    Keyboard.dismiss();
+    signIn(email, password)
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }, [email, password]);
 
   return (
     <SafeInputView>
