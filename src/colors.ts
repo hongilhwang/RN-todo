@@ -3,6 +3,8 @@ export const BLACK = '#000';
 
 export const PRIMARY = {
   DEFAULT: '#2563ED',
+  DARK: '#1e4a8a',
+  LIGHT: '#1e3a8a',
 };
 
 export const GRAY = {

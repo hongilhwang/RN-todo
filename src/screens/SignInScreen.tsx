@@ -5,7 +5,8 @@ import Input, {
   ReturnKeyTypes,
 } from '../components/Input';
 import SafeInputView from '../components/SafeInputView';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import Button from '../components/Button.tsx';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,12 +18,20 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 30,
+    paddingHorizontal: 20,
+  },
 });
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef<TextInput>(null);
+  const [disabled, setDisabled] = useState(true);
+
+  const handleSubmit = useCallback(() => {}, []);
 
   return (
     <SafeInputView>
@@ -47,6 +56,9 @@ const SignInScreen = () => {
           secureTextEntry
           iconName={IconNames.PASSWORD}
         />
+        <View style={styles.buttonContainer}>
+          <Button title={'로그인'} onPress={handleSubmit} disabled={disabled} />
+        </View>
       </View>
     </SafeInputView>
   );
