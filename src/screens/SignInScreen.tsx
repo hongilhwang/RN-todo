@@ -1,11 +1,11 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TextInput, View } from 'react-native';
 import Input, {
   IconNames,
   KeyboardTypes,
   ReturnKeyTypes,
 } from '../components/Input';
 import SafeInputView from '../components/SafeInputView';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef<TextInput>(null);
 
   return (
     <SafeInputView>
@@ -35,8 +36,10 @@ const SignInScreen = () => {
           onChangeText={(text: string) => setEmail(text.trim())}
           value={email}
           iconName={IconNames.EMAIL}
+          onSubmitEditing={() => passwordRef.current?.focus()}
         />
         <Input
+          ref={passwordRef}
           title={'비밀번호'}
           returnKeyType={ReturnKeyTypes.DONE}
           onChangeText={(text: string) => setPassword(text.trim())}

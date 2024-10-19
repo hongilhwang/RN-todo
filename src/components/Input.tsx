@@ -1,5 +1,11 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { PropsWithChildren, useMemo, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native';
+import { forwardRef, PropsWithChildren, useMemo, useState } from 'react';
 import { BLACK, GRAY, PRIMARY } from '../colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -67,70 +73,79 @@ type InputProps = PropsWithChildren<{
   returnKeyType?: ReturnKeyTypes;
   secureTextEntry?: boolean;
   onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
   iconName: IconNames;
   value: string;
 }>;
 
-const Input = ({
-  title,
-  placeholder,
-  keyboardType = KeyboardTypes.DEFAULT,
-  returnKeyType = ReturnKeyTypes.DONE,
-  secureTextEntry = false,
-  onChangeText,
-  iconName,
-  value,
-}: InputProps) => {
-  const [isFocused, setFocused] = useState(false);
+const Input = forwardRef<TextInput, InputProps>(
+  (
+    {
+      title,
+      placeholder,
+      keyboardType = KeyboardTypes.DEFAULT,
+      returnKeyType = ReturnKeyTypes.DONE,
+      secureTextEntry = false,
+      onChangeText,
+      onSubmitEditing,
+      iconName,
+      value,
+    },
+    ref,
+  ) => {
+    const [isFocused, setFocused] = useState(false);
 
-  const iconColor = useMemo(() => {
-    switch (true) {
-      case isFocused && !value:
-        return PRIMARY.DEFAULT;
-      case !!value:
-        return BLACK;
-      default:
-        return GRAY.DEFAULT;
-    }
-  }, [isFocused, value]);
+    const iconColor = useMemo(() => {
+      switch (true) {
+        case isFocused && !value:
+          return PRIMARY.DEFAULT;
+        case !!value:
+          return BLACK;
+        default:
+          return GRAY.DEFAULT;
+      }
+    }, [isFocused, value]);
 
-  return (
-    <View style={styles.container}>
-      <Text
-        style={[
-          styles.title,
-          isFocused && styles.focusedTitle,
-          value && styles.hasValueTitle,
-        ]}>
-        {title}
-      </Text>
-      <View>
-        <TextInput
+    return (
+      <View style={styles.container}>
+        <Text
           style={[
-            styles.input,
-            isFocused && styles.focusedInput,
-            value && styles.hasValueInput,
-          ]}
-          placeholder={placeholder ?? title}
-          placeholderTextColor={GRAY.DEFAULT}
-          autoCapitalize={'none'}
-          autoCorrect={false}
-          keyboardType={keyboardType}
-          returnKeyType={returnKeyType}
-          textContentType={'none'}
-          secureTextEntry={secureTextEntry}
-          keyboardAppearance={'light'}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onChangeText={onChangeText}
-          value={value}
-        />
-        <View style={styles.icon}>
-          <Icon name={iconName} size={20} color={iconColor} />
+            styles.title,
+            isFocused && styles.focusedTitle,
+            value && styles.hasValueTitle,
+          ]}>
+          {title}
+        </Text>
+        <View>
+          <TextInput
+            ref={ref}
+            style={[
+              styles.input,
+              isFocused && styles.focusedInput,
+              value && styles.hasValueInput,
+            ]}
+            keyboardType={keyboardType}
+            returnKeyType={returnKeyType}
+            placeholder={placeholder ?? title}
+            placeholderTextColor={GRAY.DEFAULT}
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            textContentType={'none'}
+            secureTextEntry={secureTextEntry}
+            keyboardAppearance={'light'}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onChangeText={onChangeText}
+            onSubmitEditing={onSubmitEditing}
+            value={value}
+          />
+          <View style={styles.icon}>
+            <Icon name={iconName} size={20} color={iconColor} />
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
 
 export default Input;
