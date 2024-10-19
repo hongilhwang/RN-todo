@@ -33,7 +33,7 @@ const SignInScreen = () => {
 
   useEffect(() => {
     setDisabled(!email || !password);
-  });
+  }, [email, password]);
 
   const handleSubmit = useCallback(() => {}, []);
 
