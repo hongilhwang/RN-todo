@@ -31,20 +31,25 @@ const SignInScreen = () => {
   const [password, setPassword] = useState('');
   const passwordRef = useRef<TextInput>(null);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setDisabled(!email || !password);
   }, [email, password]);
 
   const handleSubmit = useCallback(async () => {
-    try {
-      Keyboard.dismiss();
-      const data = await signIn(email, password);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    if (!isLoading && !disabled) {
+      try {
+        setIsLoading(true);
+        Keyboard.dismiss();
+        const data = await signIn(email, password);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+      setIsLoading(false);
     }
-  }, [email, password]);
+  }, [disabled, email, isLoading, password]);
 
   return (
     <SafeInputView>
@@ -70,7 +75,12 @@ const SignInScreen = () => {
           iconName={IconNames.PASSWORD}
         />
         <View style={styles.buttonContainer}>
-          <Button title={'로그인'} onPress={handleSubmit} disabled={disabled} />
+          <Button
+            title={'로그인'}
+            onPress={handleSubmit}
+            disabled={disabled}
+            isLoading={isLoading}
+          />
         </View>
       </View>
     </SafeInputView>

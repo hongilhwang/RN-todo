@@ -9,6 +9,6 @@ export const signIn = (email: string, password: string) => {
       } else {
         reject('User already exists');
       }
-    });
+    }, 1000);
   });
 };
