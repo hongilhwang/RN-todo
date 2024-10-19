@@ -1,4 +1,11 @@
-import { Image, Keyboard, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Keyboard,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import Input, {
   IconNames,
   KeyboardTypes,
@@ -45,7 +52,9 @@ const SignInScreen = () => {
         const data = await signIn(email, password);
         console.log(data);
       } catch (error) {
-        console.error(error);
+        Alert.alert('로그인 실패', error?.toString(), [
+          { text: '확인', onPress: () => setIsLoading(false) },
+        ]);
       }
       setIsLoading(false);
     }
