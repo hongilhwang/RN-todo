@@ -5,7 +5,7 @@ import Input, {
   ReturnKeyTypes,
 } from '../components/Input';
 import SafeInputView from '../components/SafeInputView';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../components/Button.tsx';
 
 const styles = StyleSheet.create({
@@ -30,6 +30,10 @@ const SignInScreen = () => {
   const [password, setPassword] = useState('');
   const passwordRef = useRef<TextInput>(null);
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    setDisabled(!email || !password);
+  });
 
   const handleSubmit = useCallback(() => {}, []);
 
