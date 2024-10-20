@@ -15,6 +15,9 @@ import SafeInputView from '../components/SafeInputView';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../components/Button.tsx';
 import { signIn } from '../api/auth.ts';
+import { useNavigation } from '@react-navigation/native';
+import { AuthStackParamList } from '../navigations/AuthStack.tsx';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,12 +36,18 @@ const styles = StyleSheet.create({
   },
 });
 
+type SignInScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'SignIn'
+>;
+
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef<TextInput>(null);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation<SignInScreenNavigationProp>();
 
   useEffect(() => {
     setDisabled(!email || !password);
@@ -49,16 +58,16 @@ const SignInScreen = () => {
       try {
         setIsLoading(true);
         Keyboard.dismiss();
-        const data = await signIn(email, password);
-        console.log(data);
+        await signIn(email, password);
+        navigation.navigate('List');
+        setIsLoading(false);
       } catch (error) {
         Alert.alert('로그인 실패', error?.toString(), [
           { text: '확인', onPress: () => setIsLoading(false) },
         ]);
       }
-      setIsLoading(false);
     }
-  }, [disabled, email, isLoading, password]);
+  }, [disabled, email, isLoading, navigation, password]);
 
   return (
     <SafeInputView>

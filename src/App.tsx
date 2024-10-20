@@ -1,14 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet } from 'react-native';
-import SignInScreen from './screens/SignInScreen';
 import { WHITE } from './colors.ts';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthStack from './navigations/AuthStack';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <StatusBar style={'dark'} />
-      <SignInScreen />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <StatusBar style={'dark'} />
+        <AuthStack />
+      </View>
+    </NavigationContainer>
   );
 };
 
